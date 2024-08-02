@@ -16,10 +16,10 @@ struct OnboardingView: View {
         NavigationStack(path: $pathModel.paths) {
             //OnboardingContentView(onboardingViewModel: onboardingViewModel)
             //TodoListView()
-            
-            MemoListView()
-                .environmentObject(memoListViewModel)
-                .navigationDestination(
+            //MemoListView()
+              //  .environmentObject(memoListViewModel)
+            VoiceRecorderView()
+            .navigationDestination(
                     for: PathType.self,
                     destination: { pathType in
                         switch pathType {
