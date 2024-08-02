@@ -37,6 +37,18 @@ struct VoiceRecorderView: View {
       Button("취소", role: .cancel) { }
     }
     .alert(
+        "파일 이름 변경",
+        isPresented: $voiceRecorderViewModel.isEditingFileName
+    ) {
+        TextField("새 파일 이름", text: $voiceRecorderViewModel.editingFileName)
+        Button("저장") {
+            voiceRecorderViewModel.saveEditedFileName()
+        }
+        Button("취소", role: .cancel) {
+            voiceRecorderViewModel.isEditingFileName = false
+        }
+    }
+    .alert(
       voiceRecorderViewModel.alertMessage,
       isPresented: $voiceRecorderViewModel.isDisplayAlert
     ) {
@@ -115,6 +127,7 @@ private struct VoiceRecorderCellView: View {
   private var recordedFile: URL
   private var creationDate: Date?
   private var duration: TimeInterval?
+  @State private var isEditing: Bool = false
   private var progressBarValue: Float {
     if voiceRecorderViewModel.selectedRecoredFile == recordedFile
         && (voiceRecorderViewModel.isPlaying || voiceRecorderViewModel.isPaused) {
@@ -135,23 +148,47 @@ private struct VoiceRecorderCellView: View {
   
   fileprivate var body: some View {
     VStack {
+        HStack {
+            if isEditing {
+                TextField("파일 이름", text: $voiceRecorderViewModel.editingFileName)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .onSubmit {
+                        voiceRecorderViewModel.saveEditedFileName()
+                        isEditing = false
+                    }
+            } else {
+                Text(recordedFile.lastPathComponent)
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundColor(.customBlack)
+            }
+            
+            Spacer()
+            
+            Button(action: {
+                if isEditing {
+                    voiceRecorderViewModel.saveEditedFileName()
+                } else {
+                    voiceRecorderViewModel.startEditingFileName(for: recordedFile)
+                }
+                isEditing.toggle()
+            }) {
+                if isEditing {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.black)
+                } else {
+                    Image(systemName: "pencil")
+                        .foregroundStyle(.black)
+                }
+            }
+        }
+      .padding(.horizontal, 20)
+      
       Button(
         action: {
           voiceRecorderViewModel.voiceRecordCellTapped(recordedFile)
         },
         label: {
           VStack {
-            HStack {
-              Text(recordedFile.lastPathComponent)
-                .font(.system(size: 15, weight: .bold))
-                .foregroundColor(.customBlack)
-              
-              Spacer()
-            }
-            
-            Spacer()
-              .frame(height: 5)
-            
             HStack {
               if let creationDate = creationDate {
                 Text(creationDate.fomattedVoiceRecorderTime)
