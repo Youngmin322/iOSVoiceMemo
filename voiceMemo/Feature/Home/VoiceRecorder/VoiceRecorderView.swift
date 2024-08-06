@@ -6,19 +6,19 @@
 import SwiftUI
 
 struct VoiceRecorderView: View {
-  @StateObject private var voiceRecorderViewModel = VoiceRecorderViewModel()
+  @StateObject private var voiceRecorderViewModel = VoiceRecorderViewModel() //음성 녹음 뷰 모델 인스턴스 생성
   
   var body: some View {
     ZStack {
       VStack {
-        TitleView()
+        TitleView() //상단 타이틀 뷰
         
         if voiceRecorderViewModel.recordedFiles.isEmpty {
           AnnouncementView()
         } else {
           VoiceRecorderListView(voiceRecorderViewModel: voiceRecorderViewModel)
             .padding(.top, 15)
-        }
+        } //녹음된 파일이 없으면 안내 뷰 띄우기, 있으면 녹음 파일 띄우기
         
         Spacer()
       }
@@ -27,6 +27,7 @@ struct VoiceRecorderView: View {
         .padding(.trailing, 20)
         .padding(.bottom, 50)
     }
+      //음성 메모 삭제 alert
     .alert(
       "선택된 음성메모를 삭제하시겠습니까?",
       isPresented: $voiceRecorderViewModel.isDisplayRemoveVoiceRecorderAlert
@@ -36,6 +37,7 @@ struct VoiceRecorderView: View {
       }
       Button("취소", role: .cancel) { }
     }
+      //음성 메모 파일 이름 변경 alert
     .alert(
         "파일 이름 변경",
         isPresented: $voiceRecorderViewModel.isEditingFileName
@@ -48,6 +50,7 @@ struct VoiceRecorderView: View {
             voiceRecorderViewModel.isEditingFileName = false
         }
     }
+      //음성 메모 일반 알림 메시지
     .alert(
       voiceRecorderViewModel.alertMessage,
       isPresented: $voiceRecorderViewModel.isDisplayAlert
