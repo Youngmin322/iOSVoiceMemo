@@ -32,7 +32,6 @@ class OnboardingViewModel: ObservableObject {
         subTitle: "타이머 기능으로 원하는 시간을 확인"
       )
     ]
-    
   ) {
     self.onboardingContents = onboardingContents
   }
