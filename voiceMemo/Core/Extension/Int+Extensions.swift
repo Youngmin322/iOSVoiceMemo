@@ -6,7 +6,7 @@
 import Foundation
 
 extension Int {
-    var fromattedTimeString: String {
+    var formattedTimeString: String {
         let time = Time.fromSeconds(self)
         let hoursString = String(format: "%02d", time.hours)
         let minutesString = String(format: "%02d", time.minutes)

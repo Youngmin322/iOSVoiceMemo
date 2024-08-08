@@ -79,7 +79,7 @@ private struct AnnouncementView: View {
         VStack(spacing: 15) {
             Spacer()
             
-            Image("pancil")
+            Image("pencil")
                 .renderingMode(.template)
             Text("\"퇴근 9시간전 메모\"")
             Text("\"개발 끝낸 후 퇴근하기!\"")
