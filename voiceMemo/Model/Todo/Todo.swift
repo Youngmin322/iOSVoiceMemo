@@ -47,10 +47,7 @@ struct Todo: Identifiable, Hashable {
     }
     
     var convertedDayAndTime: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return "\(formatter.string(from: day)) \(formatter.string(from: time))"
+            String("\(day.formattedDay) - \(time.formattedTime)에 알림")
     }
 }
 

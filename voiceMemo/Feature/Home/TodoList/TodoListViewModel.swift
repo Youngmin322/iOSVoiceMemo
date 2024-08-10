@@ -32,13 +32,13 @@ class TodoListViewModel: ObservableObject {
         todos.append(newTodo)
     }
     
-    // 최신순으로 정렬
-    func sortByNewest() {
+    // 나중 할 일로 정렬
+    func sortByFuture() {
         todos.sort { $0.time > $1.time }
     }
     
-    // 오래된 순으로 정렬
-    func sortByOldest() {
+    // 가까운 할 일로 정렬
+    func sortByUpcoming() {
         todos.sort { $0.time < $1.time }
     }
     

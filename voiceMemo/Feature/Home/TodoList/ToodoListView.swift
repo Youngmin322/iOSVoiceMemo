@@ -6,11 +6,11 @@ struct TodoListView: View {
     @EnvironmentObject private var todoListViewModel: TodoListViewModel
     @EnvironmentObject private var homeViewModel: HomeViewModel
     
-    @State private var selectedSortOption: SortOption = .newest
+    @State private var selectedSortOption: SortOption = .future
     
     enum SortOption: String, CaseIterable, Identifiable {
-        case newest = "최신순"
-        case oldest = "오래된 순"
+        case future = "나중 할 일"
+        case upcoming = "가까운 할 일"
         case priority = "중요도 순"
         
         var id: String { self.rawValue }
@@ -29,9 +29,9 @@ struct TodoListView: View {
                 .padding()
                 .onChange(of: selectedSortOption, perform: { option in
                     switch option {
-                    case .newest:
+                    case .future:
                         todoListViewModel.sortByNewest()
-                    case .oldest:
+                    case .upcoming:
                         todoListViewModel.sortByOldest()
                     case .priority:
                         todoListViewModel.sortByPriority()
