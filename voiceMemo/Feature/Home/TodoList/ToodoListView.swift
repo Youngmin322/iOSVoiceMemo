@@ -6,7 +6,7 @@ struct TodoListView: View {
     @EnvironmentObject private var todoListViewModel: TodoListViewModel
     @EnvironmentObject private var homeViewModel: HomeViewModel
     
-    @State private var selectedSortOption: SortOption = .future
+    @State private var selectedSortOption: SortOption = .upcoming
     
     enum SortOption: String, CaseIterable, Identifiable {
         case future = "나중 할 일"
@@ -30,9 +30,9 @@ struct TodoListView: View {
                 .onChange(of: selectedSortOption, perform: { option in
                     switch option {
                     case .future:
-                        todoListViewModel.sortByNewest()
+                        todoListViewModel.sortByFuture()
                     case .upcoming:
-                        todoListViewModel.sortByOldest()
+                        todoListViewModel.sortByUpcoming()
                     case .priority:
                         todoListViewModel.sortByPriority()
                     }
