@@ -22,6 +22,20 @@ struct VoiceRecorderView: View {
                 }
                 
                 Spacer()
+
+                if voiceRecorderViewModel.isRecording {
+                    // 녹음 중일 때 음성 인식 결과 표시
+                    VStack {
+                        Text("음성 인식 중...")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                        Text(voiceRecorderViewModel.transcribedText)
+                            .font(.system(size: 16))
+                            .foregroundColor(.black)
+                            .padding()
+                    }
+                    .padding(.bottom, 20)
+                }
             }
             
             RecordBtnView(voiceRecorderViewModel: voiceRecorderViewModel)
@@ -365,7 +379,6 @@ private struct RecordBtnView: View {
         }
     }
 }
-
 
 
 #Preview {

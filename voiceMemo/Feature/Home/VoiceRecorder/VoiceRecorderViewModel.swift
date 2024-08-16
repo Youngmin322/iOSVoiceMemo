@@ -4,8 +4,9 @@
 //
 
 import AVFoundation
+import Speech
 
-class VoiceRecorderViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
+class VoiceRecorderViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, SFSpeechRecognizerDelegate {
     @Published var isDisplayRemoveVoiceRecorderAlert: Bool
     @Published var isDisplayAlert: Bool
     @Published var alertMessage: String
@@ -27,6 +28,13 @@ class VoiceRecorderViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate 
     /// 현재 선택된 음성메모 파일
     @Published var selectedRecoredFile: URL?
     
+    /// STT 기능
+    @Published var transcribedText: String = ""  // 인식된 텍스트를 저장
+    
+    let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "ko-KR"))
+    let request = SFSpeechAudioBufferRecognitionRequest()
+    let audioEngine = AVAudioEngine()
+    
     init(
         isDisplayRemoveVoiceRecorderAlert: Bool = false,
         isDisplayErrorAlert: Bool = false,
@@ -47,6 +55,62 @@ class VoiceRecorderViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate 
         self.playedTime = playedTime
         self.recordedFiles = recordedFiles
         self.selectedRecoredFile = selectedRecoredFile
+    }
+}
+
+extension VoiceRecorderViewModel {
+    func requestSpeechRecognitionAuthorization() {
+        SFSpeechRecognizer.requestAuthorization { authStatus in
+            DispatchQueue.main.async {
+                switch authStatus {
+                case .authorized:
+                    print("User authorized speech recognition")
+                case .denied, .restricted, .notDetermined:
+                    self.displayAlert(message: "음성 인식 권한이 필요합니다.")
+                @unknown default:
+                    fatalError()
+                }
+            }
+        }
+    }
+}
+
+extension VoiceRecorderViewModel {
+    func startSpeechRecognition() {
+        guard let speechRecognizer = speechRecognizer, speechRecognizer.isAvailable else {
+            displayAlert(message: "음성 인식 서비스가 현재 사용 불가능합니다.")
+            return
+        }
+        
+        let inputNode = audioEngine.inputNode
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+            self.request.append(buffer)
+        }
+
+        audioEngine.prepare()
+
+        do {
+            try audioEngine.start()
+        } catch {
+            displayAlert(message: "오디오 엔진을 시작할 수 없습니다.")
+            return
+        }
+
+        speechRecognizer.recognitionTask(with: request) { result, error in
+            if let result = result {
+                let transcribedText = result.bestTranscription.formattedString
+                self.transcribedText = transcribedText
+            } else if let error = error {
+                self.displayAlert(message: "음성 인식 중 오류가 발생했습니다: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func stopSpeechRecognition() {
+        audioEngine.stop()
+        audioEngine.inputNode.removeTap(onBus: 0)
+        request.endAudio()
     }
 }
 
@@ -124,32 +188,35 @@ extension VoiceRecorderViewModel {
         if isPlaying {
             stopPlaying()
             startRecording()
+            startSpeechRecognition()
         } else if isRecording {
             stopRecording()
+            stopSpeechRecognition()
         } else {
             startRecording()
+            startSpeechRecognition()
         }
     }
     
     private func startRecording() {
-            let fileURL = self.getDocumentsDirectory().appendingPathComponent("새로운 녹음 \(self.recordedFiles.count + 1)")
-            let settings = [
-                AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
-                AVSampleRateKey : 12000,
-                AVNumberOfChannelsKey : 1,
-                AVEncoderAudioQualityKey : AVAudioQuality.high.rawValue
-            ]
-            
-            do {
-                try AVAudioSession.sharedInstance().setCategory(.record)
-                try AVAudioSession.sharedInstance().setActive(true)
-                self.audioRecorder = try AVAudioRecorder(url: fileURL, settings: settings)
-                self.audioRecorder?.record()
-                self.isRecording = true
-            } catch {
-                self.displayAlert(message: "음성 메모 녹음 중 오류가 발생했습니다.")
-            }
+        let fileURL = self.getDocumentsDirectory().appendingPathComponent("새로운 녹음 \(self.recordedFiles.count + 1)")
+        let settings = [
+            AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey : 12000,
+            AVNumberOfChannelsKey : 1,
+            AVEncoderAudioQualityKey : AVAudioQuality.high.rawValue
+        ]
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.record)
+            try AVAudioSession.sharedInstance().setActive(true)
+            self.audioRecorder = try AVAudioRecorder(url: fileURL, settings: settings)
+            self.audioRecorder?.record()
+            self.isRecording = true
+        } catch {
+            self.displayAlert(message: "음성 메모 녹음 중 오류가 발생했습니다.")
         }
+    }
     
     private func stopRecording() {
         audioRecorder?.stop()
@@ -231,4 +298,17 @@ extension VoiceRecorderViewModel {
         
         return (creationDate, duration)
     }
+    
+    func requestPermissions() {
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            if granted {
+                print("마이크 권한이 허용되었습니다.")
+                self.requestSpeechRecognitionAuthorization()
+            } else {
+                print("마이크 권한이 거부되었습니다.")
+                self.displayAlert(message: "마이크 사용 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
+            }
+        }
+    }
+    
 }
