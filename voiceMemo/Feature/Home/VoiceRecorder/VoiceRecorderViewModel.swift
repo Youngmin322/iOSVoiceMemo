@@ -101,8 +101,6 @@ extension VoiceRecorderViewModel {
             if let result = result {
                 let transcribedText = result.bestTranscription.formattedString
                 self.transcribedText = transcribedText
-            } else if let error = error {
-                self.displayAlert(message: "음성 인식 중 오류가 발생했습니다: \(error.localizedDescription)")
             }
         }
     }

@@ -33,7 +33,7 @@ struct VoiceRecorderView: View {
                             .font(.system(size: 16))
                             .foregroundColor(.black)
                             .padding()
-                            .background(Color.customGray0.opacity(0.2))
+                            .background(Color.customIconGray.opacity(0.2))
                                                         .cornerRadius(10)
                     }
                     .padding(.trailing, 20)
