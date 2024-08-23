@@ -211,6 +211,7 @@ extension VoiceRecorderViewModel {
             self.audioRecorder = try AVAudioRecorder(url: fileURL, settings: settings)
             self.audioRecorder?.record()
             self.isRecording = true
+            self.transcribedText = "" 
         } catch {
             self.displayAlert(message: "음성 메모 녹음 중 오류가 발생했습니다.")
         }
@@ -220,6 +221,7 @@ extension VoiceRecorderViewModel {
         audioRecorder?.stop()
         self.recordedFiles.append(self.audioRecorder!.url)
         self.isRecording = false
+        stopSpeechRecognition()
     }
     
     private func getDocumentsDirectory() -> URL {

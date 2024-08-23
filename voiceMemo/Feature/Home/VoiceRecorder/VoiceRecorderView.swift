@@ -26,18 +26,19 @@ struct VoiceRecorderView: View {
                 if voiceRecorderViewModel.isRecording {
                     // 녹음 중일 때 음성 인식 결과 표시
                     VStack {
-                        Text("음성 인식 중...")
-                            .font(.headline)
-                            .foregroundColor(.gray)
                         Text(voiceRecorderViewModel.transcribedText)
-                            .font(.system(size: 16))
+                            .font(.system(size: 16, weight: .medium, design: .default))
                             .foregroundColor(.black)
                             .padding()
                             .background(Color.customIconGray.opacity(0.2))
                                                         .cornerRadius(10)
+                                                        .padding(.bottom, 20)
+                        Text("음성 인식 중...")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                            .padding(.bottom, 50)
                     }
                     .padding(.trailing, 20)
-                    .padding(.bottom, 100)
                 }
             }
             
