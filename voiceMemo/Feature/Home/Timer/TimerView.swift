@@ -1,20 +1,17 @@
-//
-//  TimerView.swift
-//  voiceMemo
-//
-
 import SwiftUI
 
 struct TimerView: View {
-  @StateObject var timerViewModel = TimerViewModel()
-  
-  var body: some View {
-    if timerViewModel.isDisplaySetTimeView {
-      SetTimerView(timerViewModel: timerViewModel)
-    } else {
-      TimerOperationView(timerViewModel: timerViewModel)
+    @StateObject var timerViewModel = TimerViewModel()
+    
+    var body: some View {
+        ZStack {
+            if timerViewModel.isDisplaySetTimeView {
+                SetTimerView(timerViewModel: timerViewModel)
+            } else {
+                TimerOperationView(timerViewModel: timerViewModel)
+            }
+        }
     }
-  }
 }
 
 // MARK: - 타이머 설정 뷰
@@ -118,7 +115,7 @@ private struct TimerCreateBtnView: View {
       label: {
         Text("설정하기")
           .font(.system(size: 18, weight: .bold))
-          .foregroundColor(.customGreen)
+          .foregroundColor(Color(red: 236/255, green: 203/255, blue: 220/255)) // 버튼 글씨색 변경
       }
     )
   }
@@ -126,81 +123,82 @@ private struct TimerCreateBtnView: View {
 
 // MARK: - 타이머 작동 뷰
 private struct TimerOperationView: View {
-  @ObservedObject private var timerViewModel: TimerViewModel
-  
-  fileprivate init(timerViewModel: TimerViewModel) {
-    self.timerViewModel = timerViewModel
-  }
-  
-  fileprivate var body: some View {
-    VStack {
-      ZStack {
-        VStack {
-          Text("\(timerViewModel.timeRemaining.formattedTimeString)")
-            .font(.system(size: 28))
-            .foregroundColor(.customBlack)
-            .monospaced()
-          
-          HStack(alignment: .bottom) {
-            Image(systemName: "bell.fill")
-            
-            Text("\(timerViewModel.time.convertedSeconds.formattedSettingTime)")
-              .font(.system(size: 16))
-              .foregroundColor(.customBlack)
-              .padding(.top, 10)
-          }
-        }
-        
-        Circle()
-          .stroke(Color.customOrange, lineWidth: 6)
-          .frame(width: 350)
-      }
-      
-      Spacer()
-        .frame(height: 10)
-      
-      HStack {
-        Button(
-          action: {
-            timerViewModel.cancelBtnTapped()
-          },
-          label: {
-            Text("취소")
-              .font(.system(size: 16))
-              .foregroundColor(.customBlack)
-              .padding(.vertical, 25)
-              .padding(.horizontal, 22)
-              .background(
-                Circle()
-                  .fill(Color.customGray2.opacity(0.3))
-              )
-          }
-        )
-        
-        Spacer()
-        
-        Button(
-          action: {
-            timerViewModel.pauseOrRestartBtnTapped()
-          },
-          label: {
-            Text(timerViewModel.isPaused ? "계속진행" : "일시정지")
-              .font(.system(size: 14))
-              .foregroundColor(.customBlack)
-              .padding(.vertical, 25)
-              .padding(.horizontal, 7)
-              .background(
-                Circle()
-                  .fill(Color(red: 1, green: 0.75, blue: 0.52).opacity(0.3))
-              )
-          }
-        )
-      }
-      .padding(.horizontal, 20)
+    @ObservedObject private var timerViewModel: TimerViewModel
+    
+    fileprivate init(timerViewModel: TimerViewModel) {
+        self.timerViewModel = timerViewModel
     }
-  }
+    
+    fileprivate var body: some View {
+        VStack {
+            ZStack {
+                VStack {
+                    Text("\(timerViewModel.timeRemaining.formattedTimeString)")
+                        .font(.system(size: 28))
+                        .foregroundColor(.customBlack)
+                        .monospaced()
+                    
+                    HStack(alignment: .bottom) {
+                        Image(systemName: "bell.fill")
+                        
+                        Text("\(timerViewModel.time.convertedSeconds.formattedSettingTime)")
+                            .font(.system(size: 16))
+                            .foregroundColor(.customBlack)
+                            .padding(.top, 10)
+                    }
+                }
+                
+                Circle()
+                    .trim(from: 0, to: timerViewModel.progress) // 진행 상태에 따른 동그라미 크기
+                    .stroke(Color(red: 236/255, green: 203/255, blue: 220/255), lineWidth: 6) // 분홍색 동그라미
+                    .frame(width: 350)
+                    .rotationEffect(.degrees(-90)) // 시작점 회전을 위해 추가
+                    .animation(.easeInOut, value: timerViewModel.progress) // 애니메이션 효과 추가
+            }
+            
+            Spacer()
+                .frame(height: 10)
+            
+            HStack {
+                Button(
+                    action: {
+                        timerViewModel.cancelBtnTapped() // 타이머 초기화
+                    },
+                    label: {
+                        Text("재설정")
+                            .font(.system(size: 16))
+                            .foregroundColor(.customBlack)
+                            .padding(.vertical, 25)
+                            .padding(.horizontal, 22)
+                            .background(
+                                Circle()
+                                    .fill(Color.customGray2.opacity(0.3))
+                            )
+                    }
+                )
+                
+                Spacer()
+                
+                Button(
+                    action: {
+                        timerViewModel.pauseOrRestartBtnTapped()
+                    },
+                    label: {
+                        Text(timerViewModel.isPaused ? "재생" : "일시정지")
+                            .font(.system(size: 16))
+                            .foregroundColor(.customBlack)
+                            .frame(width: 71, height: 71) // 고정된 크기 설정
+                            .background(
+                                Circle()
+                                    .fill(Color(red: 236/255, green: 203/255, blue: 220/255).opacity(0.3)) // 색상 설정
+                            )
+                    }
+                )
+            }
+            .padding(.horizontal, 20)
+        }
+    }
 }
-
 
 struct TimerView_Previews: PreviewProvider {
   static var previews: some View {
