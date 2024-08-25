@@ -305,7 +305,17 @@ private struct VoiceRecorderCellView: View {
                             }
                         )
                     }
-                }
+                    if let transcribedText = voiceRecorderViewModel.transcribedTextForFile(recordedFile),
+                                     !transcribedText.isEmpty {
+                                      Text(transcribedText)
+                                          .font(.system(size: 14, weight: .medium))
+                                          .foregroundColor(.black)
+                                          .padding()
+                                          .background(Color.customIconGray.opacity(0.2))
+                                          .cornerRadius(10)
+                                          .padding(.top, 10)
+                                      }
+                                  }
                 .padding(.horizontal, 20)
             }
             

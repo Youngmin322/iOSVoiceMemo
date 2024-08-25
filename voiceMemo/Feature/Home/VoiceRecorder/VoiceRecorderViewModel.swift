@@ -87,16 +87,16 @@ extension VoiceRecorderViewModel {
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
             self.request.append(buffer)
         }
-
+        
         audioEngine.prepare()
-
+        
         do {
             try audioEngine.start()
         } catch {
             displayAlert(message: "오디오 엔진을 시작할 수 없습니다.")
             return
         }
-
+        
         speechRecognizer.recognitionTask(with: request) { result, error in
             if let result = result {
                 let transcribedText = result.bestTranscription.formattedString
@@ -113,10 +113,41 @@ extension VoiceRecorderViewModel {
 }
 
 extension VoiceRecorderViewModel {
+    func saveTranscribedText(for audioFileURL: URL, transcribedText: String) {
+        let textFileURL = audioFileURL.deletingPathExtension().appendingPathExtension("txt")
+        do {
+            try transcribedText.write(to: textFileURL, atomically: true, encoding: .utf8)
+        } catch {
+            displayAlert(message: "STT 텍스트 저장 중 오류가 발생 했습니다.")
+        }
+    }
+    
+    func loadTranscribedText(for audioFileURL: URL) -> String? {
+        let textFileURL = audioFileURL.deletingPathExtension().appendingPathExtension("txt")
+        
+        do {
+            let transcribedText = try String(contentsOf: textFileURL, encoding: .utf8)
+            return transcribedText
+        } catch {
+            displayAlert(message: "STT 텍스트를 불러오는 중 오류가 발생했습니다.")
+            return nil
+        }
+    }
+    
+    func transcribedTextForFile(_ file: URL) -> String? {
+        return loadTranscribedText(for: file)
+    }
+}
+
+
+extension VoiceRecorderViewModel {
     func voiceRecordCellTapped(_ recordedFile: URL) {
         if selectedRecoredFile != recordedFile {
             stopPlaying()
             selectedRecoredFile = recordedFile
+            if let transcribedText = loadTranscribedText(for: recordedFile) {
+                self.transcribedText = transcribedText
+            }
         }
     }
     
@@ -211,7 +242,7 @@ extension VoiceRecorderViewModel {
             self.audioRecorder = try AVAudioRecorder(url: fileURL, settings: settings)
             self.audioRecorder?.record()
             self.isRecording = true
-            self.transcribedText = "" 
+            self.transcribedText = ""
         } catch {
             self.displayAlert(message: "음성 메모 녹음 중 오류가 발생했습니다.")
         }
@@ -219,7 +250,10 @@ extension VoiceRecorderViewModel {
     
     private func stopRecording() {
         audioRecorder?.stop()
-        self.recordedFiles.append(self.audioRecorder!.url)
+        if let recordedFileURL = self.audioRecorder?.url {
+            self.recordedFiles.append(recordedFileURL)
+            saveTranscribedText(for: recordedFileURL, transcribedText: self.transcribedText)
+        }
         self.isRecording = false
         stopSpeechRecognition()
     }
@@ -310,5 +344,4 @@ extension VoiceRecorderViewModel {
             }
         }
     }
-    
 }
