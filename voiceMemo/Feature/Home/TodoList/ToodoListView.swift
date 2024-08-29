@@ -170,15 +170,8 @@ struct TodoCellView: View {
     var body: some View {
         VStack(spacing: 20) {
             HStack {
-                if !todoListViewModel.isEditTodoMode {
-                    Button(
-                        action: { todoListViewModel.selectedBoxTapped(todo) },
-                        label: { todo.selected ? Image("selectedBox") : Image("unSelectedBox") }
-                    )
-                }
-                
                 VStack(alignment: .leading, spacing: 5) {
-                    // 제목 표시
+                    // 할 일 제목 표시
                     Text(todo.title)
                         .font(.system(size: 16))
                         .foregroundColor(todo.selected ? .customIconGray : .customBlack)
@@ -197,6 +190,7 @@ struct TodoCellView: View {
                 
                 Spacer()
                 
+                // 오른쪽 삭제 선택 버튼만 나타나도록 설정
                 if todoListViewModel.isEditTodoMode {
                     Button(
                         action: {
@@ -218,7 +212,7 @@ struct TodoCellView: View {
         }
     }
     
-    // 중요도에 따른 색상 선택
+    // 중요도에 따른 색상 선택 함수
     private func priorityColor(for priority: Priority) -> Color {
         switch priority {
         case .high:
@@ -230,6 +224,7 @@ struct TodoCellView: View {
         }
     }
 }
+
 
 // MARK: - Todo 작성 버튼 뷰
 private struct WriteTodoBtnView: View {
