@@ -11,7 +11,7 @@ class TodoListViewModel: ObservableObject {
     }
     
     var navigationBarRightBtnMode: NavigationBtnType {
-        isEditTodoMode ? .complete : .edit
+        isEditTodoMode ? .complete : .remove
     }
     
     // 할 일 추가 메서드
