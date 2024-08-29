@@ -20,6 +20,23 @@ struct TodoListView: View {
         ZStack {
             // 투두 셀 리스트
             VStack {
+                if !todoListViewModel.todos.isEmpty {
+                    CustomNavigationBar(
+                        isDisplayLeftBtn: false,
+                        rightBtnAction: {
+                            todoListViewModel.navigationRightBtnTapped()
+                        },
+                        rightBtnType: todoListViewModel.navigationBarRightBtnMode
+                    )
+                } else {
+                    Spacer()
+                        .frame(height: 30)
+                }
+                
+                TitleView()
+                    .padding(.top, 20)
+                
+                // Picker를 타이틀 뷰 아래에 배치
                 Picker("정렬 기준", selection: $selectedSortOption) {
                     ForEach(SortOption.allCases) { option in
                         Text(option.rawValue).tag(option)
@@ -38,22 +55,6 @@ struct TodoListView: View {
                     }
                 })
 
-                if !todoListViewModel.todos.isEmpty {
-                    CustomNavigationBar(
-                        isDisplayLeftBtn: false,
-                        rightBtnAction: {
-                            todoListViewModel.navigationRightBtnTapped()
-                        },
-                        rightBtnType: todoListViewModel.navigationBarRightBtnMode
-                    )
-                } else {
-                    Spacer()
-                        .frame(height: 30)
-                }
-                
-                TitleView()
-                    .padding(.top, 20)
-                
                 if todoListViewModel.todos.isEmpty {
                     AnnouncementView()
                 } else {
