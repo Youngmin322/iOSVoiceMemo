@@ -81,9 +81,7 @@ private struct AnnouncementView: View {
             
             Image("pencil")
                 .renderingMode(.template)
-            Text("\"퇴근 9시간전 메모\"")
-            Text("\"개발 끝낸 후 퇴근하기!\"")
-            Text("\"밀린 알고리즘 공부하기!!\"")
+
             
             Spacer()
         }
@@ -199,6 +197,7 @@ private struct WriteMemoBtnView: View {
                     },
                     label: {
                         Image("writeBtn")
+                           
                     })
             }
         }
