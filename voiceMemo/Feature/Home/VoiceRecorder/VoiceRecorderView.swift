@@ -67,6 +67,8 @@ struct VoiceRecorderView: View {
                 homeViewModel.setVoiceRecordersCount(recordedFiles.count)
             }
         )
+        .navigationTitle("음성메모") // 타이틀 설정
+                   .navigationBarTitleDisplayMode(.inline) // 타이틀 위치를 상단에 작게 표시
     }
 }
 
@@ -77,11 +79,12 @@ private struct TitleView: View {
             Text("음성메모")
                 .font(.system(size: 30, weight: .bold))
                 .foregroundColor(.customBlack)
-            
+
             Spacer()
         }
         .padding(.horizontal, 30)
-        .padding(.top, 30)
+        .padding(.top, 50)  // 상단 패딩을 30에서 40으로 증가
+        .padding(.bottom, 10)  // 하단에 약간의 패딩 추가
     }
 }
 
@@ -391,6 +394,7 @@ private struct RecordBtnView: View {
                 )
             }
         }
+        .padding()
     }
 }
 
