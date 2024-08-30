@@ -48,6 +48,7 @@ private struct TitleView: View {
       Text("타이머")
         .font(.system(size: 30, weight: .bold))
         .foregroundColor(.customBlack)
+        .padding(.top, 30) // 추가된 부분
       
       Spacer()
     }
@@ -115,7 +116,7 @@ private struct TimerCreateBtnView: View {
       label: {
         Text("설정하기")
           .font(.system(size: 18, weight: .bold))
-          .foregroundColor(Color(red: 236/255, green: 203/255, blue: 220/255)) // 버튼 글씨색 변경
+          .foregroundColor(Color(red: 213/255, green: 46/255, blue: 134/255)) // 버튼 글씨색 변경
       }
     )
   }
@@ -150,7 +151,7 @@ private struct TimerOperationView: View {
                 
                 Circle()
                     .trim(from: 0, to: timerViewModel.progress) // 진행 상태에 따른 동그라미 크기
-                    .stroke(Color(red: 236/255, green: 203/255, blue: 220/255), lineWidth: 6) // 분홍색 동그라미
+                    .stroke(Color(red: 246/255, green: 202/255, blue: 241/255), lineWidth: 6) // 분홍색 동그라미
                     .frame(width: 350)
                     .rotationEffect(.degrees(-90)) // 시작점 회전을 위해 추가
                     .animation(.easeInOut, value: timerViewModel.progress) // 애니메이션 효과 추가
@@ -167,6 +168,7 @@ private struct TimerOperationView: View {
                     label: {
                         Text("재설정")
                             .font(.system(size: 16))
+                            .fontWeight(.bold) // 글씨 굵게
                             .foregroundColor(.customBlack)
                             .padding(.vertical, 25)
                             .padding(.horizontal, 22)
@@ -186,11 +188,12 @@ private struct TimerOperationView: View {
                     label: {
                         Text(timerViewModel.isPaused ? "재생" : "일시정지")
                             .font(.system(size: 16))
+                            .fontWeight(.bold) // 글씨 굵게
                             .foregroundColor(.customBlack)
                             .frame(width: 71, height: 71) // 고정된 크기 설정
                             .background(
                                 Circle()
-                                    .fill(Color(red: 236/255, green: 203/255, blue: 220/255).opacity(0.3)) // 색상 설정
+                                    .fill(Color(red: 213/255, green: 46/255, blue: 134/255)) // 색상 설정
                             )
                     }
                 )
