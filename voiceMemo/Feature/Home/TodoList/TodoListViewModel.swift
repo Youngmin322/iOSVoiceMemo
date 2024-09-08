@@ -1,48 +1,60 @@
-//
-//  TodoListViewModel.swift
-//  voiceMemo
-//
-
 import Foundation
 
-class TodoListViewModel: ObservableObject{
-    @Published var todos: [Todo]
-    @Published var isEditTodoMode: Bool
-    @Published var removeTodos: [Todo]
-    @Published var isDisplayRemoveTodoAlert: Bool
+class TodoListViewModel: ObservableObject {
+    @Published var todos: [Todo] = []
+    @Published var isEditTodoMode: Bool = false
+    @Published var removeTodos: [Todo] = []
+    @Published var isDisplayRemoveTodoAlert: Bool = false
     
     var removeTodosCount: Int {
         return removeTodos.count
     }
+    
     var navigationBarRightBtnMode: NavigationBtnType {
-        isEditTodoMode ? .complete : .edit
+        isEditTodoMode ? .complete : .remove
     }
     
-    init(
-        todos: [Todo] = [],
-        isEditModeTodoMode: Bool = false,
-        removeTodos: [Todo] = [],
-        isDisplayRemoveTodoAlert: Bool = false
+    // 할 일 추가 메서드
+    func addTodo(
+        title: String,
+        time: Date,
+        day: Date,
+        priority: Priority = .medium,
+        selected: Bool = false
     ) {
-        self.todos = todos
-        self.isEditTodoMode = isEditModeTodoMode
-        self.removeTodos = removeTodos
-        self.isDisplayRemoveTodoAlert = isDisplayRemoveTodoAlert
+        let newTodo = Todo(
+            title: title,
+            time: time,
+            day: day,
+            priority: priority,
+            selected: selected
+        )
+        todos.append(newTodo)
     }
-}
+    
+    // 나중 할 일로 정렬
+    func sortByFuture() {
+        todos.sort { $0.time > $1.time }
+    }
+    
+    // 가까운 할 일로 정렬
+    func sortByUpcoming() {
+        todos.sort { $0.time < $1.time }
+    }
+    
+    // 중요도 순으로 정렬
+    func sortByPriority() {
+        todos.sort { $0.priority > $1.priority }
+    }
 
-extension TodoListViewModel {
+    // 할 일 선택 메서드
     func selectedBoxTapped(_ todo: Todo) {
-        if let index = todos.firstIndex(where: { $0 == todo}) {
+        if let index = todos.firstIndex(of: todo) {
             todos[index].selected.toggle()
         }
     }
     
-    func addTodo(_ todo: Todo){
-        todos.append(todo)
-    }
-    
-    func navigationRightBtnTapped(){
+    func navigationRightBtnTapped() {
         if isEditTodoMode {
             if removeTodos.isEmpty {
                 isEditTodoMode = false
@@ -51,15 +63,15 @@ extension TodoListViewModel {
             }
         } else {
             isEditTodoMode = true
-            }
         }
+    }
     
     func setIsDisplayRemoveTodoAlert(_ isDisplay: Bool) {
         isDisplayRemoveTodoAlert = isDisplay
     }
     
     func todoRemoveSelectedBoxTapped(_ todo: Todo) {
-        if let index = removeTodos.firstIndex(of: todo){
+        if let index = removeTodos.firstIndex(of: todo) {
             removeTodos.remove(at: index)
         } else {
             removeTodos.append(todo)
@@ -74,4 +86,3 @@ extension TodoListViewModel {
         isEditTodoMode = false
     }
 }
-

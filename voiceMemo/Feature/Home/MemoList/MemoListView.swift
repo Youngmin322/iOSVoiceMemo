@@ -67,8 +67,10 @@ private struct TitleView: View {
             
             Spacer()
         }
-        .font(.system(size: 30, weight:  .bold))
-        .padding(.leading, 20)
+        .font(.system(size: 30, weight: .bold))
+              .foregroundColor(.customBlack) // 동일한 글꼴 색상 적용
+              .padding(.horizontal, 30) // 동일한 좌우 패딩 적용
+              .padding(.top, -30) // 동일한 상단 패딩 적용
     }
 }
 
