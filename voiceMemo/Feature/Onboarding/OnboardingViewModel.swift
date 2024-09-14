@@ -18,18 +18,18 @@ class OnboardingViewModel: ObservableObject {
       ),
       .init(
         imageFileName: "onboarding_2",
-        title: "똑똑한 나만의 기록장",
-        subTitle: "메모장으로 생각나는 기록은 언제든지"
+        title: "나만의 작은 기록의 공간",
+        subTitle: "언제든 떠오르는 생각, 메모장에"
       ),
       .init(
         imageFileName: "onboarding_3",
-        title: "하나라도 놓치지 않도록",
-        subTitle: "음성메모 기능으로 놓치고 싶지않은 기록까지"
+        title: "작은 순간도 놓치지 않게",
+        subTitle: "소중한 기억, 음성 메모로 완벽하게"
       ),
       .init(
         imageFileName: "onboarding_4",
-        title: "정확한 시간의 경과",
-        subTitle: "타이머 기능으로 원하는 시간을 확인"
+        title: "흘러가는 시간의 순간들",
+        subTitle: "타이머로 맞이하는 원하는 시간"
       )
     ]
   ) {

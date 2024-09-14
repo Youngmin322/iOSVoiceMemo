@@ -384,11 +384,13 @@ private struct RecordBtnView: View {
                                         isAnimation.toggle()
                                     }
                                 }
+                                .padding(-10)
                                 .onDisappear {
                                     isAnimation = false
                                 }
                         } else {
                             Image("mic")
+                                .padding(-12)
                         }
                     }
                 )
