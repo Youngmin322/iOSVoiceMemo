@@ -187,6 +187,17 @@ struct TodoCellView: View {
                     Text("Priority: \(todo.priority.rawValue)")
                         .font(.system(size: 14))
                         .foregroundColor(priorityColor(for: todo.priority))
+                    
+                    // 태그 표시
+                    HStack {
+                                            ForEach(todo.tags, id: \.self) { tag in
+                                                Text(tag)
+                                                    .padding(5)
+                                                  
+                                                    .foregroundColor(Color(red: 238/255, green: 95/255, blue: 167/255))
+                                                    .cornerRadius(5)
+                                            }
+                                        }
                 }
                 
                 Spacer()

@@ -31,19 +31,22 @@ struct Todo: Identifiable, Hashable {
     var day: Date
     var priority: Priority
     var selected: Bool
+    var tags: [String]
     
     init(
         title: String,
         time: Date,
         day: Date,
         priority: Priority = .medium,
-        selected: Bool = false
+        selected: Bool = false,
+        tags: [String] = []
     ) {
         self.title = title
         self.time = time
         self.day = day
         self.priority = priority
-        self.selected = selected
+        self.selected = selected;
+        self.tags = tags
     }
     
     var convertedDayAndTime: String {

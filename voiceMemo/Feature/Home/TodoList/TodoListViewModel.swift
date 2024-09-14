@@ -20,6 +20,7 @@ class TodoListViewModel: ObservableObject {
         time: Date,
         day: Date,
         priority: Priority = .medium,
+        tags: [String] = [], // 태그 매개변수 추가
         selected: Bool = false
     ) {
         let newTodo = Todo(
@@ -27,7 +28,8 @@ class TodoListViewModel: ObservableObject {
             time: time,
             day: day,
             priority: priority,
-            selected: selected
+            selected: selected,
+            tags: tags // 태그 포함
         )
         todos.append(newTodo)
     }
