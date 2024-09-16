@@ -61,16 +61,18 @@ private struct TitleView: View {
         HStack {
             if memoListViewModel.memos.isEmpty {
                 Text("메모를\n추가해 보세요.")
+                    .padding(.top, 20) // 텍스트를 아래로 내리기 위해 패딩 추가
             } else {
                 Text("메모 \(memoListViewModel.memos.count)개가\n있습니다.")
+                    .padding(.top, 20) // 텍스트를 아래로 내리기 위해 패딩 추가
             }
             
             Spacer()
         }
         .font(.system(size: 30, weight: .bold))
-              .foregroundColor(.customBlack) // 동일한 글꼴 색상 적용
-              .padding(.horizontal, 30) // 동일한 좌우 패딩 적용
-              .padding(.top, -30) // 동일한 상단 패딩 적용
+        .foregroundColor(.customBlack)
+        .padding(.horizontal, 30)
+        .padding(.top, -30)
     }
 }
 
@@ -83,15 +85,17 @@ private struct AnnouncementView: View {
             
             Image("pencil")
                 .renderingMode(.template)
+            Text("오늘의 메모 내용 등록하기!")
+            Text("언제 어디서나 메모하자!")
+            Text("하단의 펜슬 버튼을 눌러 메모를 시작해주세요.")
 
             
             Spacer()
         }
-        .font(.system(size:16))
+        .font(.system(size: 16))
         .foregroundColor(.customGray2)
-        }
     }
-
+}
 // MARK: - 메모 리스트 컨텐츠 뷰
 
 private struct MemoListContentView: View {
