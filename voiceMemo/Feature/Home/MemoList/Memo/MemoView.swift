@@ -79,9 +79,6 @@ private struct MemoTitleInputView: View {
 
 private struct MemoContentInputView: View {
     @ObservedObject private var memoViewModel: MemoViewModel
-    @State private var selectedFontSize: CGFloat = 20
-    @State private var selectedFontWeight: Font.Weight = .regular
-    @State private var selectedTextColor: Color = .black
     @State private var isOptionsExpanded: Bool = false
 
     fileprivate init(memoViewModel: MemoViewModel) {
@@ -92,7 +89,6 @@ private struct MemoContentInputView: View {
         VStack {
             Button(action: {
                 isOptionsExpanded.toggle()
-                
             }) {
                 Text(isOptionsExpanded ? "옵션 숨기기" : "옵션 보기")
                     .font(.headline)
@@ -102,7 +98,7 @@ private struct MemoContentInputView: View {
 
             if isOptionsExpanded {
                 VStack {
-                    Picker("글자 크기", selection: $selectedFontSize) {
+                    Picker("글자 크기", selection: $memoViewModel.memo.fontSize) {
                         ForEach([20, 25, 30, 35, 40, 45, 50], id: \.self) { size in
                             Text("\(size)").tag(CGFloat(size))
                         }
@@ -110,27 +106,27 @@ private struct MemoContentInputView: View {
                     .pickerStyle(SegmentedPickerStyle())
                     .padding()
 
-                    Picker("글자 굵기", selection: $selectedFontWeight) {
+                    Picker("글자 굵기", selection: $memoViewModel.memo.fontWeight) {
                         Text("보통").tag(Font.Weight.regular)
                         Text("굵게").tag(Font.Weight.bold)
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding()
 
-                    ColorPicker("글자 색상", selection: $selectedTextColor)
+                    ColorPicker("글자 색상", selection: $memoViewModel.memo.textColor)
                         .padding()
                 }
             }
 
             ZStack(alignment: .topLeading) {
                 TextEditor(text: $memoViewModel.memo.content)
-                    .font(.system(size: selectedFontSize, weight: selectedFontWeight))
-                    .foregroundColor(selectedTextColor)
+                    .font(.system(size: memoViewModel.memo.fontSize, weight: memoViewModel.memo.fontWeight))
+                    .foregroundColor(memoViewModel.memo.textColor)
 
                 if memoViewModel.memo.content.isEmpty {
                     Text("메모를 입력하세요")
                         .font(.system(size: 16))
-                        .foregroundColor(.customGray1)
+                        .foregroundColor(.gray)
                         .allowsHitTesting(false)
                         .padding(.top, 10)
                         .padding(.leading, 5)

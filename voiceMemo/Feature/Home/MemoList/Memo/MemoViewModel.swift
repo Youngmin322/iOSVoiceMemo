@@ -2,14 +2,12 @@
 //  MemoViewModel.swift
 //  voiceMemo
 //
+import SwiftUI
 
-import Foundation
-
-class MemoViewModel : ObservableObject {
+class MemoViewModel: ObservableObject {
     @Published var memo: Memo
     
     init(memo: Memo) {
         self.memo = memo
     }
-  
 }
