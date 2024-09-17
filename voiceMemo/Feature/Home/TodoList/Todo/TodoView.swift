@@ -128,7 +128,7 @@ private struct SelectDayView: View {
                     label: {
                         Text("\(todoViewModel.day.formattedDay)")
                             .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.customGreen)
+                            .foregroundColor(.customPink)
                     }
                 )
                 .popover(isPresented: $todoViewModel.isDisplayCalendar) {

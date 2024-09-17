@@ -344,7 +344,7 @@ private struct ProgressBar: View {
                     .fill(Color.customGray2)
                 
                 Rectangle()
-                    .fill(Color.customGreen)
+                    .fill(Color.customPink)
                     .frame(width: CGFloat(self.progress) * geometry.size.width)
             }
         }

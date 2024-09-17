@@ -148,11 +148,11 @@ private struct StartBtnView: View {
         HStack {
           Text("시작하기")
             .font(.system(size: 16, weight: .medium))
-            .foregroundColor(.customGreen)
+            .foregroundColor(.customPink)
           
           Image("startHome")
             .renderingMode(.template)
-            .foregroundColor(.customGreen)
+            .foregroundColor(.customPink)
         }
       }
     )

@@ -13,7 +13,7 @@ extension Color {
     static let customGray0 = Color("customGray0")
     static let customGray1 = Color("customGray1")
     static let customGray2 = Color("customGray2")
-    static let customGreen = Color("customGreen")
+    static let customPink = Color("customPink")
     static let customIconGray = Color("customIconGray")
     static let customOrange = Color("customOrange")
     static let customSky = Color("customSky")
