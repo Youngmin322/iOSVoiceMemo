@@ -18,8 +18,8 @@ class OnboardingViewModel: ObservableObject {
       ),
       .init(
         imageFileName: "onboarding_2",
-        title: "나만의 작은 기록의 공간",
-        subTitle: "언제든 떠오르는 생각, 메모장에"
+        title: "언제 어디서든 메모하기",
+        subTitle: "기억해야 할것, 메모하기"
       ),
       .init(
         imageFileName: "onboarding_3",
