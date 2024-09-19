@@ -45,6 +45,9 @@ struct TodoView: View {
 
             SelectPriorityView(todoViewModel: todoViewModel) // priority 선택 뷰 추가
                 .padding(.leading, 20)
+            
+            SelectTagView(todoViewModel: todoViewModel) // tag 선택 뷰
+                .padding(.leading, 20)
       
             Spacer()
         }
@@ -176,6 +179,58 @@ private struct SelectPriorityView: View {
         }
     }
 }
+
+// MARK: - 태그 선택 뷰
+private struct SelectTagView: View {
+    @ObservedObject private var todoViewModel: TodoViewModel
+    @State private var selectedTags: Set<String> = []
+    
+    let availableTags = ["운동", "공부", "업무", "기타"]
+    
+    fileprivate init(todoViewModel: TodoViewModel) {
+        self.todoViewModel = todoViewModel
+        _selectedTags = State(initialValue: Set(todoViewModel.currentTodo.tags))
+    }
+    
+    fileprivate var body: some View {
+        VStack(spacing: 5) {
+            HStack {
+                Text("태그")
+                    .foregroundColor(.customIconGray)
+                Spacer()
+            }
+            .padding(.bottom, 10)
+            
+            // 태그 버튼을 가로로 배치
+            HStack(spacing: 10) {
+                ForEach(availableTags, id: \.self) { tag in
+                    Button(action: {
+                        if selectedTags.contains(tag) {
+                            selectedTags.remove(tag)
+                        } else {
+                            selectedTags.insert(tag)
+                        }
+                        // 선택한 태그를 todo에 업데이트
+                        todoViewModel.updateTodoTags(tags: Array(selectedTags))
+                    }) {
+                        Text(tag)
+                            .padding(10)
+                            .background(selectedTags.contains(tag) ? Color(red: 238/255, green: 95/255, blue: 167/255) : Color.gray.opacity(0.3))
+                            .foregroundColor(.white)
+                            .cornerRadius(5)
+                            .frame(maxWidth: .infinity) // 버튼을 가로로 늘림
+                    }
+                }
+            }
+            .padding(.horizontal) // 좌우 여백 추가
+
+            Spacer()
+        }
+        .padding(.vertical) // 위아래 여백 추가
+        .background(Color.clear) // 배경색 제거
+    }
+}
+
 
 #Preview {
     TodoView()

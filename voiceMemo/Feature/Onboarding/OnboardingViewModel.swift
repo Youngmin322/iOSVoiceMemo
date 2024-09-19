@@ -13,8 +13,8 @@ class OnboardingViewModel: ObservableObject {
     onboardingContents: [OnboardingContent] = [
       .init(
         imageFileName: "onboarding_1",
-        title: "오늘의 할일",
-        subTitle: "To do list로 언제 어디서든 해야할일을 한눈에"
+        title: "꿈을 향한 첫 걸음",
+        subTitle: "내일의 나를 향한 여정, To do list와 함께"
       ),
       .init(
         imageFileName: "onboarding_2",

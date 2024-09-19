@@ -11,6 +11,7 @@ class TodoViewModel: ObservableObject {
     @Published var day: Date = Date()
     @Published var priority: Priority = .medium
     @Published var isDisplayCalendar: Bool = false
+    @Published var currentTodo: Todo
     
     // Init 메서드에 priority 추가
     init(
@@ -24,10 +25,14 @@ class TodoViewModel: ObservableObject {
         self.time = time
         self.day = day
         self.priority = priority
-        self.isDisplayCalendar = isDisplayCalendar
+        self.isDisplayCalendar = isDisplayCalendar;
+        self.currentTodo = Todo(title: title,time: time, day: day, priority: priority)
     }
 
     func setIsDisplayCalendar(_ isDisplay: Bool) {
         isDisplayCalendar = isDisplay
     }
+    func updateTodoTags(tags: [String]) {
+           currentTodo.tags = tags
+       }
 }
