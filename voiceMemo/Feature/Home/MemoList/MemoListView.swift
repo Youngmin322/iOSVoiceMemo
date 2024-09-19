@@ -8,7 +8,8 @@ import SwiftUI
 struct MemoListView: View {
     @EnvironmentObject private var pathModel: PathModel
     @EnvironmentObject private var memoListViewModel: MemoListViewModel
-    
+    @EnvironmentObject private var homeViewModel: HomeViewModel
+
     var body: some View {
         ZStack {
             VStack {
@@ -27,27 +28,33 @@ struct MemoListView: View {
                 TitleView()
                     .padding(.top, 20)
                 
-                if memoListViewModel.memos.isEmpty{
+                if memoListViewModel.memos.isEmpty {
                     AnnouncementView()
                 } else {
                     MemoListContentView()
                         .padding(.top, 20)
                 }
-                
             }
             
             WriteMemoBtnView()
                 .padding(.trailing, 20)
-                .padding( .bottom, 50)
+                .padding(.bottom, 50)
         }
         .alert(
             "메모 \(memoListViewModel.removeMemoCount)개 삭제하시겠습니까?",
             isPresented: $memoListViewModel.isDisplayRemoveMemoAlert
         ) {
-            Button(" 삭제 ", role: .destructive) {
+            Button("삭제", role: .destructive) {
                 memoListViewModel.removeBtnTapped()
+                homeViewModel.setMemosCount(memoListViewModel.memos.count)
             }
             Button("취소", role: .cancel) { }
+        }
+        .onAppear {
+            homeViewModel.setMemosCount(memoListViewModel.memos.count)
+        }
+        .onChange(of: memoListViewModel.memos) { newMemos in
+            homeViewModel.setMemosCount(newMemos.count) 
         }
     }
 }
@@ -88,7 +95,6 @@ private struct AnnouncementView: View {
             Text("오늘의 메모 내용 등록하기!")
             Text("언제 어디서나 메모하자!")
             Text("하단의 펜슬 버튼을 눌러 메모를 시작해주세요.")
-
             
             Spacer()
         }
@@ -96,6 +102,7 @@ private struct AnnouncementView: View {
         .foregroundColor(.customGray2)
     }
 }
+
 // MARK: - 메모 리스트 컨텐츠 뷰
 
 private struct MemoListContentView: View {
@@ -106,21 +113,19 @@ private struct MemoListContentView: View {
             HStack {
                 Text("메모 목록")
                     .font(.system(size: 16, weight: .bold))
-                    .padding(.leading,20)
+                    .padding(.leading, 20)
                 
                 Spacer()
             }
             
             ScrollView(.vertical) {
-                VStack(spacing:0) {
+                VStack(spacing: 0) {
                     Rectangle()
                         .fill(Color.customGray0)
                         .frame(height: 1)
                     
-                    ForEach(memoListViewModel.memos, id: \.self){ memo in
+                    ForEach(memoListViewModel.memos, id: \.self) { memo in
                         MemoCellView(memo: memo)
-                        
-                        
                     }
                 }
             }
@@ -146,7 +151,7 @@ private struct MemoCellView: View {
         Button(
             action: {
                 pathModel.paths.append(.memoView(isCreatMode: false, memo: memo))
-            } ,
+            },
             label: {
                 VStack(spacing: 10) {
                     HStack {
@@ -157,7 +162,7 @@ private struct MemoCellView: View {
                                 .foregroundColor(.customBlack)
                             
                             Text(memo.convertedDate)
-                                .font(.system(size:12))
+                                .font(.system(size: 12))
                                 .foregroundColor(.customIconGray)
                         }
                         
@@ -169,7 +174,7 @@ private struct MemoCellView: View {
                                     isRemoveSelected.toggle()
                                     memoListViewModel.memoRemoveSelectedBoxTapped(memo)
                                 },
-                                label: { isRemoveSelected ? Image("selectedBox") : Image("unSelectedBox" ) }
+                                label: { isRemoveSelected ? Image("selectedBox") : Image("unSelectedBox") }
                             )
                         }
                     }
@@ -203,17 +208,16 @@ private struct WriteMemoBtnView: View {
                     },
                     label: {
                         Image("writeBtn")
-                           
-                    })
+                    }
+                )
             }
         }
     }
 }
 
-
 #Preview {
     MemoListView()
         .environmentObject(PathModel())
         .environmentObject(MemoListViewModel())
+        .environmentObject(HomeViewModel()) // 추가: HomeViewModel 주입
 }
-
