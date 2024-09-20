@@ -184,7 +184,7 @@ struct TodoCellView: View {
                         .foregroundColor(.customIconGray)
                     
                     // 중요도 표시
-                    Text("Priority: \(todo.priority.rawValue)")
+                    Text("\(todo.priority.rawValue)")
                         .font(.system(size: 14))
                         .foregroundColor(priorityColor(for: todo.priority))
                 
