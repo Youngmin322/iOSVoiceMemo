@@ -1,5 +1,5 @@
 import SwiftUI
-
+//테스트용 소스 코드 변경
 struct TimerView: View {
     @StateObject var timerViewModel = TimerViewModel()
     
