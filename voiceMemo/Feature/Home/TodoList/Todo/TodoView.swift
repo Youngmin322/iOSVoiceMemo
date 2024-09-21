@@ -21,7 +21,7 @@ struct TodoView: View {
                         title: todoViewModel.title,
                         time: todoViewModel.time,
                         day: todoViewModel.day,
-                        priority: todoViewModel.priority, // priority 추가
+                        priority: todoViewModel.priority,
                         selected: false
                     )
                     pathModel.paths.removeLast()
@@ -37,16 +37,17 @@ struct TodoView: View {
       
             TodoTitleView(todoViewModel: todoViewModel)
                 .padding(.leading, 20)
-      
+            
+            // 중요도 선택 뷰를 제목 아래로 이동하고 중요도 라벨 제거
+            SelectPriorityView(todoViewModel: todoViewModel)
+                .padding(.horizontal, 20) // 양쪽 여백 추가하여 중앙에 정렬
+              
             SelectTimeView(todoViewModel: todoViewModel)
       
             SelectDayView(todoViewModel: todoViewModel)
                 .padding(.leading, 20)
-
-            SelectPriorityView(todoViewModel: todoViewModel) // priority 선택 뷰 추가
-                .padding(.leading, 20)
             
-            SelectTagView(todoViewModel: todoViewModel) // tag 선택 뷰
+            SelectTagView(todoViewModel: todoViewModel) // 태그 선택 뷰
                 .padding(.leading, 20)
       
             Spacer()
@@ -82,10 +83,12 @@ private struct TodoTitleView: View {
     }
     
     fileprivate var body: some View {
-        TextField("제목을 입력하세요.", text: $todoViewModel.title)
+        VStack {
+            TextField("제목을 입력하세요.", text: $todoViewModel.title)
+            
+        }
     }
 }
-
 // MARK: - 시간 선택 뷰
 private struct SelectTimeView: View {
     @ObservedObject private var todoViewModel: TodoViewModel
@@ -171,18 +174,13 @@ private struct SelectPriorityView: View {
     
     fileprivate var body: some View {
         VStack(spacing: 5) {
-            HStack {
-                Text("중요도")
-                    .foregroundColor(.customIconGray)
-                Spacer()
-            }
-            
-            Picker("Priority", selection: $todoViewModel.priority) {
-                Text("High").tag(Priority.high)
-                Text("Medium").tag(Priority.medium)
-                Text("Low").tag(Priority.low)
+            Picker("", selection: $todoViewModel.priority) {
+                Text("중요도 상").tag(Priority.high)
+                Text("중요도 중").tag(Priority.medium)
+                Text("중요도 하").tag(Priority.low)
             }
             .pickerStyle(SegmentedPickerStyle())
+            .frame(maxWidth: .infinity, alignment: .center) // 가운데 정렬
         }
     }
 }

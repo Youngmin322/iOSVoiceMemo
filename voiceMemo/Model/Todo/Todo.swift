@@ -7,9 +7,9 @@ import Foundation
 
 // 중요도 열거형 정의
 enum Priority: String, Comparable {
-    case high = "High"
-    case medium = "Medium"
-    case low = "Low"
+    case high = "중요도 상"
+    case medium = "중요도 중"
+    case low = "중요도 하"
     
     // Comparable 프로토콜을 구현하여 중요도를 비교할 수 있도록 합니다.
     static func < (lhs: Priority, rhs: Priority) -> Bool {
