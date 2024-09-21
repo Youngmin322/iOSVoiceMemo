@@ -59,12 +59,19 @@ private struct TitleView: View {
     fileprivate var body: some View {
         HStack {
             Text("To do list를\n추가해 보세요.")
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(nil)
+                .minimumScaleFactor(0.5)
+            
             Spacer()
         }
         .font(.system(size: 30, weight: .bold))
         .padding(.leading, 20)
+        .padding(.bottom, 20)
+        .frame(maxWidth: .infinity, alignment: .leading) 
     }
 }
+
 
 // MARK: - 투두 타이틀 뷰 (제목 입력 뷰)
 private struct TodoTitleView: View {
