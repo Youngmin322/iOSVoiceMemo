@@ -140,7 +140,7 @@ private struct TimerOperationView: View {
                         .monospaced()
                     
                     HStack(alignment: .bottom) {
-                        Image(systemName: "bell.fill")
+                        Image(systemName: "clock.fill")
                         
                         Text("\(timerViewModel.time.convertedSeconds.formattedSettingTime)")
                             .font(.system(size: 16))
@@ -193,7 +193,7 @@ private struct TimerOperationView: View {
                             .frame(width: 71, height: 71) // 고정된 크기 설정
                             .background(
                                 Circle()
-                                    .fill(Color(red: 213/255, green: 46/255, blue: 134/255)) // 색상 설정
+                                    .fill(Color(red: 221/255, green: 104/255, blue: 165/255)) // 색상 설정
                             )
                     }
                 )
@@ -203,8 +203,7 @@ private struct TimerOperationView: View {
     }
 }
 
-struct TimerView_Previews: PreviewProvider {
-  static var previews: some View {
+#Preview {
     TimerView()
-  }
+        .environmentObject(TimerViewModel())
 }
